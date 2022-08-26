@@ -1,5 +1,9 @@
 import fitz,re
 from PIL import Image
+import time
+import psutil
+
+
 def extractquestion(page_no,qn_no,fileName):
     doc = fitz.open(fileName)
     page = doc.load_page(page_no)
@@ -7,9 +11,9 @@ def extractquestion(page_no,qn_no,fileName):
     start,end=False,False
     useful_block_line_span=[]
 
-    for blockidx,block in enumerate(blocks):
-        for lineidx,line in enumerate(block["lines"]):
-            for wordidx,word in enumerate(line['spans']):
+    for blockIdx,block in enumerate(blocks):
+        for lineIdx,line in enumerate(block["lines"]):
+            for wordIdx,word in enumerate(line['spans']):
                 # print(word['text'])
                 if re.match(fr'{qn_no}\.',word['text']):
                     # print("Start Status",word['text'])
@@ -19,14 +23,12 @@ def extractquestion(page_no,qn_no,fileName):
                     end=True
                 if end:break
                 if start:
-                    useful_block_line_span.append((blockidx,lineidx,wordidx))
+                    useful_block_line_span.append((blockIdx,lineIdx,wordIdx))
         if end:break
     point = [blocks[blk]['lines'][line]['spans'][span]['bbox']for blk,line,span in useful_block_line_span]
-    # print(point)
-    # print(50*'*')
     fileSaveError="NO"
     try:
-        x0=min([i[0]for i in point])
+        x0=min([i[0]for i in point])+10
         y0=min([i[1]for i in point])
         x1=max([i[2]for i in point])
         y1=max([i[3]for i in point])
@@ -40,14 +42,19 @@ def extractquestion(page_no,qn_no,fileName):
         if (fileSaveError=="NO" ):
             mat = fitz.Matrix(2.0,2.0)
             page.get_pixmap(clip=(x0,y0,x1,y1),matrix=mat).save(f'{fileName}_Q{qn_no}.png')
+            img = Image.open(f'{fileName}_Q{qn_no}.png')
+            img.show()
+            for proc in psutil.process_iter():
+                if proc.name() == "Microsoft.Photos.exe":
+                    # time.sleep(0.02)
+                    proc.kill()
         else:
             mat = fitz.Matrix(2.0,2.0)
             page.get_pixmap(clip=(x0,y0,x1,y1),matrix=mat).save(f'{fileName}_Q{qn_no}_ERROR.png')
     except:
         print(f"Unable to Save Image for Question {qn_no}")
-    # display(Image.open("question.png"))
 
-# extractquestion(1,13)
+
 q_done=1
 fileName=input("Enter name of file = ")
 pages = int(input("Enter total number of pages "))
@@ -58,5 +65,3 @@ for page in range(pages):
         extractquestion(page, q,fileName)
         q_=q
     q_done=q_
-    # print(q_done)
-    # print(i)3
