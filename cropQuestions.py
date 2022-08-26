@@ -34,6 +34,9 @@ def extractquestion(page_no,qn_no,fileName):
         y1=max([i[3]for i in point])
         # print(x1-x0,y1-y0)
     except:
+        print("")
+        print("************** Error ***************")
+        print("")
         print(f"Error in Question ={qn_no}")
         fileSaveError=qn_no
 
@@ -52,12 +55,17 @@ def extractquestion(page_no,qn_no,fileName):
             mat = fitz.Matrix(2.0,2.0)
             page.get_pixmap(clip=(x0,y0,x1,y1),matrix=mat).save(f'{fileName}_Q{qn_no}_ERROR.png')
     except:
+        print("")
+        print("*********** Warning !! ********************")
         print(f"Unable to Save Image for Question {qn_no}")
+        print("")
 
-
+print("************  Welcome to the CropQ !! ************  :) anujverma-eng")
+print("Happy cropping !!")
+print("")
 q_done=1
-fileName=input("Enter name of file = ")
-pages = int(input("Enter total number of pages "))
+fileName=input("Enter name of PDF file = ")
+pages = int(input("Enter total number of pages (Having Questions Only) = "))
 for page in range(pages):
     questions = int(input(f"Enter the Number of questions in Page - {page+1} = "))+1
 
@@ -65,3 +73,7 @@ for page in range(pages):
         extractquestion(page, q,fileName)
         q_=q
     q_done=q_
+print("Thank you for Using !!")
+print("           -- Anuj Verma")
+time.sleep(8)
+print("Good Bye!!")
