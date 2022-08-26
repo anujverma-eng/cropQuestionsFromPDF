@@ -30,7 +30,7 @@ def extractquestion(page_no,qn_no,fileName):
     try:
         x0=min([i[0]for i in point])+10
         y0=min([i[1]for i in point])
-        x1=max([i[2]for i in point])
+        x1=max([i[2]for i in point])+10
         y1=max([i[3]for i in point])
         # print(x1-x0,y1-y0)
     except:
