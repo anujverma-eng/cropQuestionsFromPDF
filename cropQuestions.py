@@ -5,7 +5,16 @@ import psutil
 
 
 def extractquestion(page_no,qn_no,fileName,ssName,showMe,zoom):
-    doc = fitz.open(fileName)
+    try:
+        doc = fitz.open(fileName)
+    except:
+        print("")
+        print("************** Error ***************")
+        print("File name is not correct || OR || File doesn't exist !!")
+        print("************** Kindly Restart app with Right File !! ***************")
+        print(("Kindly Don't Proceed further !"))
+        print("")
+        return
     page = doc.load_page(page_no)
     blocks=page.get_text('dict',flags=0)['blocks']
     start,end=False,False
