@@ -15,6 +15,8 @@ def extractquestion(page_no,qn_no,fileName,ssName,showMe,zoom):
         print(("Kindly Don't Proceed further !"))
         print("")
         return
+    # area = fitz.paper_size("A4")
+    # print(area)
     page = doc.load_page(page_no)
     blocks=page.get_text('dict',flags=0)['blocks']
     start,end=False,False
@@ -25,10 +27,8 @@ def extractquestion(page_no,qn_no,fileName,ssName,showMe,zoom):
             for wordIdx,word in enumerate(line['spans']):
                 # print(word['text'])
                 if re.match(fr'{qn_no}\.',word['text']):
-                    # print("Start Status",word['text'])
                     start=True
                 if re.match(fr'{qn_no+1}\.',word['text']):
-                    # print("End Status",word['text'])
                     end=True
                 if end:break
                 if start:
@@ -41,12 +41,19 @@ def extractquestion(page_no,qn_no,fileName,ssName,showMe,zoom):
         y0=min([i[1]for i in point])
         x1=max([i[2]for i in point])+10
         y1=max([i[3]for i in point])
-        # print(x1-x0,y1-y0)
+        # print(qn_no," = ",x1-x0,y1-y0)
+        if (x1-x0 > 370 or y1-y0>300):
+            print("")
+            print("************************************ Warning !! ************************************")
+            print(f"Unable to save Image for Question: {qn_no}  || You need to take the crop it Manually")
+            print("************************************************************************************")
+            print("")
+            fileSaveError="Yes"
+            return
     except:
         fileSaveError=qn_no
         print("")
         print("************** Error ***************")
-        print("")
         print(f"Error in Question ={qn_no}")
         print("")
 
@@ -71,29 +78,36 @@ def extractquestion(page_no,qn_no,fileName,ssName,showMe,zoom):
             page.get_pixmap(clip=(x0,y0,x1,y1),matrix=mat).save(f'{ssName}{qn_no:03}_ERROR.png')
     except:
         print("")
-        print("*********** Warning !! ********************")
-        print(f"Unable to Save Image for Question {qn_no}")
+        print("***************************** Warning !! *********************************")
+        print(f"Unable to Save Image for Question {qn_no}  || You need to crop it Manually")
         print("")
 
 print("************  Welcome to the CropQ !! ************  :) anujverma-eng")
 print("Happy cropping !!")
 print("")
 q_done=1
-fileName=input("Enter name of PDF file = ")
-ssName = input("Enter name of ScreenShots you want to save = ")
-print("")
-showMe = input("Do you want to see Images ? (Enter 'Y' for Yes & 'N' for No) = ")
-zoom = int(input("Enter the Zoom Factor = "))
-print("")
-pages = int(input("Enter total number of pages (Having Questions Only) = "))
-for page in range(pages):
-    questions = int(input(f"Enter the Number of questions in Page - {page+1} = "))+1
+wish ="Y"
+while (wish=="Y"):
+    fileName=input("Enter name of PDF file = ")
+    ssName = input("Enter name of ScreenShots you want to save = ")
+    print("")
+    showMe = input("Do you want to see Images ? (Enter 'Y' for Yes & 'N' for No) = ")
+    zoom = int(input("Enter the Zoom Factor = "))
+    print("")
+    pages = int(input("Enter total number of pages (Having Questions Only) = "))
+    for page in range(pages):
+        questions = int(input(f"Enter the Number of questions in Page - {page+1} = "))+1
 
-    for q in range(q_done,questions):
-        extractquestion(page, q,fileName,ssName,showMe,zoom)
-        q_=q
-    q_done=q_
+        for q in range(q_done,questions):
+            extractquestion(page, q,fileName,ssName,showMe,zoom)
+            q_=q
+        q_done=q_
+    print("")
+    wish = input("Do you want to continue for another PDF's ? (Y/N) ")
+    if(wish=="Y"):
+        q_done=1
+    print("")
 print("Thank you for Using !!")
 print("           -- Anuj Verma")
-time.sleep(15)
+time.sleep(180)
 print("Good Bye!!")
