@@ -18,7 +18,7 @@ def drawROI(fileName,page,page_no):
         print("")
         print(e)
         print("You need to crop Image Manually, Unable to Open ROI Selector !!")
-        return 10,100,10,100
+        return 0,0,0,0
 
 
 def extractquestion(page_no,qn_no,fileName,ssName,zoom,imgName):
@@ -93,6 +93,8 @@ def extractquestion(page_no,qn_no,fileName,ssName,zoom,imgName):
                 # print("************************************************************************************")
                 print("")
                 x,y,w,h = drawROI(fileName, page, page_no)
+                if(x==0 and y==0 and w==0 and h==0):
+                    return
                 time.sleep(0.1)
                 x0=x
                 y0=y
@@ -167,7 +169,10 @@ try:
     
     print("")
     # showMe = input("Do you want to see Images ? (Enter 'Y' for Yes & 'N' for No) = ")
-    zoom = int(input("Enter the Zoom Factor = "))
+    try:
+        zoom = int(input("Enter the Zoom Factor = "))
+    except:
+        print("Enter the Numeric value Between (1 to 50), Enter value 10 for 200% Zoom")
     print("")
     pages = int(input("Enter total number of pages (Having Questions Only) = "))
     for page in range(pages):

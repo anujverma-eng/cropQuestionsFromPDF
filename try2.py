@@ -135,12 +135,15 @@ try:
     fileName=input("Enter name of PDF file = ")
     imgName = input("Do you want to save images with custom name (Y/N) ")
     ssName=""
-    if(imgName=="Y"):
+    if(imgName=="Y" or imgName=="y"):
         ssName = input("Enter name of ScreenShots you want to save = ")
     
     print("")
     # showMe = input("Do you want to see Images ? (Enter 'Y' for Yes & 'N' for No) = ")
-    zoom = int(input("Enter the Zoom Factor = "))
+    try:
+        zoom = int(input("Enter the Zoom Factor = "))
+    except:
+        print("Enter the Numeric value Between (1 to 50), Enter value 10 for 200% Zoom")
     print("")
     pages = int(input("Enter total number of pages (Having Questions Only) = "))
     for page in range(pages):
