@@ -7,6 +7,7 @@ import psutil
 import os
 
 
+# ! Draw ROI Function
 def drawROI(fileName,page,page_no):
     page.get_pixmap().save(f'Page({page_no+1}).png')
     pageImg = cv2.imread(f'Page({page_no+1}).png')
@@ -20,7 +21,7 @@ def drawROI(fileName,page,page_no):
         print("You need to crop Image Manually, Unable to Open ROI Selector !!")
         return 0,0,0,0
 
-
+# ! Extract Questions Function
 def extractquestion(page_no,qn_no,fileName,ssName,zoom,imgName):
     try:
         try:
@@ -158,20 +159,19 @@ def extractquestion(page_no,qn_no,fileName,ssName,zoom,imgName):
         print("------------------ Anuj Verma || 78886-65915   || anuj@pw.live  || anujverma123ok@gmail.com -----------------")
         print("")
         return
-    
-try:
-    print("")
-    print("************  Welcome to the Crop Tool || Physics Wallah Private Limited ||!! ************  :) anujverma-eng")
-    print("Happy cropping !!")
-    print("")
+
+
+# ! Default RUNNER
+def defaultRunner():
     q_done=1
     fileName=input("Enter name of PDF file = ")
     imgName = input("Do you want to save images with custom name (Y/N) ")
     ssName=""
-    if(imgName=="Y"):
+    if(imgName=="Y" or imgName=="y"):
         ssName = input("Enter name of ScreenShots you want to save = ")
     
     print("")
+
     # showMe = input("Do you want to see Images ? (Enter 'Y' for Yes & 'N' for No) = ")
     try:
         zoom = int(input("Enter the Zoom Factor = "))
@@ -187,6 +187,56 @@ try:
             extractquestion(page, q,fileName,ssName,zoom,imgName)
             q_=q
         q_done=q_+1
+    return
+
+# ! CUSTOM PAGE INPUT FUNCTION
+def CustomPageInput():
+    fileName=input("Enter name of PDF file = ")
+    imgName = input("Do you want to save images with custom name (Y/N) ")
+    ssName=""
+    if(imgName=="Y" or imgName=="y"):
+        ssName = input("Enter name of ScreenShots you want to save = ")
+    
+    print("")
+    try:
+        zoom = int(input("Enter the Zoom Factor = "))
+    except:
+        print("Enter the Numeric value Between (1 to 50), Enter value 10 for 200% Zoom")
+    print("")
+    pageStart = int(input("Enter the Page Number from questions STARTS : "))-1
+    pageEnd = int(input("Enter the Page Number from questions   ENDS : "))
+    for page in range(pageStart,pageEnd):
+        print("")
+        questStart = int(input(f"Enter the Question Number START in Page - {page+1} = "))
+        questEnd = int(input(f"Enter the Question Number ENDS in Page - {page+1} = "))+1
+        for q in range(questStart,questEnd):
+            # print(f"page = {page} & Q = {q}")
+            extractquestion(page, q,fileName,ssName,zoom,imgName)
+            q_=q
+    return
+
+
+
+# ! Main Function Starts from here!!
+
+try:
+    print("")
+    print("************  Welcome to the Crop Tool || Physics Wallah Private Limited ||!! ************  :) anujverma-eng")
+    print("Happy cropping !!")
+    print("")
+    print("-------- Choose your Program to run for : ---------")
+    print("1. Default Runner")
+    print("2. Custom Page input")
+    print("")
+    runner = int(input("Enter you Runner: "))
+    print("")
+    if(runner==1):
+        defaultRunner()
+    elif(runner==2):
+        CustomPageInput()
+    else:
+        defaultRunner()
+
     print("")
     print("")
     print("Thank you for Using !!")
