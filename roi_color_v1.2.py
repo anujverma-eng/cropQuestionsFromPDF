@@ -204,6 +204,7 @@ def CustomPageInput():
     imgName = input("Do you want to save images with custom name (Y/N) ")
     ssName=""
     if(imgName=="Y" or imgName=="y"):
+        imgName="Y"
         ssName = input("Enter name of ScreenShots you want to save = ")
     
     print("")
@@ -244,10 +245,13 @@ try:
     print(Fore.GREEN+Style.BRIGHT+Back.RESET+"")
     print("")
     if(runner==1):
+        print("YOU HAVE CHOOSE DEFAULT RUNNER")
         defaultRunner()
     elif(runner==2):
+        print("YOU HAVE CHOOSE CUSTOM PAGE RUNNER")
         CustomPageInput()
     else:
+        print("YOU HAVE CHOOSE DEFAULT RUNNER")
         defaultRunner()
 
     print("")
